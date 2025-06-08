@@ -5,7 +5,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-icon address">
-            <el-icon size="32"><ep-office-building /></el-icon>
+            <el-icon size="32"><office-building /></el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-number">{{ stats.totalAddresses }}</div>
@@ -67,7 +67,7 @@
             @click="$router.push('/addresses/list')"
             class="action-btn"
           >
-            <el-icon><ep-plus /></el-icon>
+          <el-icon><Money /></el-icon>
             新增住址
           </el-button>
           
@@ -77,7 +77,7 @@
             @click="$router.push('/residents/list')"
             class="action-btn"
           >
-            <el-icon><ep-user-filled /></el-icon>
+            <el-icon><user-filled /></el-icon>
             新增住户
           </el-button>
           
@@ -87,7 +87,7 @@
             @click="$router.push('/expenses/list')"
             class="action-btn"
           >
-            <el-icon><ep-money /></el-icon>
+          <el-icon><Money /></el-icon>
             新增费用
           </el-button>
           
@@ -97,7 +97,7 @@
             @click="$router.push('/expenses/stats')"
             class="action-btn"
           >
-            <el-icon><ep-data-analysis /></el-icon>
+            <el-icon><data-analysis /></el-icon>
             费用统计
           </el-button>
         </div>
@@ -111,7 +111,7 @@
           <div class="card-header">
             <span>最近活动</span>
             <el-button link @click="refreshActivities">
-              <el-icon><ep-refresh /></el-icon>
+             <el-icon><Refresh /></el-icon>
               刷新
             </el-button>
           </div>

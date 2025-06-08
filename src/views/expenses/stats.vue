@@ -39,15 +39,15 @@
         
         <el-form-item>
           <el-button type="primary" @click="handleQuery">
-            <el-icon><ep-search /></el-icon>
+           <el-icon><Search /></el-icon>
             查询
           </el-button>
           <el-button @click="handleReset">
-            <el-icon><ep-refresh /></el-icon>
+           <el-icon><Refresh /></el-icon>
             重置
           </el-button>
           <el-button type="success" @click="handleExport">
-            <el-icon><ep-download /></el-icon>
+            <el-icon><download /></el-icon>
             导出
           </el-button>
         </el-form-item>
@@ -60,7 +60,7 @@
         <el-card class="overview-card">
           <div class="overview-content">
             <div class="overview-icon total">
-              <el-icon><ep-money /></el-icon>
+            <el-icon><Money /></el-icon>
             </div>
             <div class="overview-info">
               <div class="overview-value">{{ formatMoney(overview.totalAmount) }}</div>
@@ -73,7 +73,7 @@
         <el-card class="overview-card">
           <div class="overview-content">
             <div class="overview-icon paid">
-              <el-icon><ep-check /></el-icon>
+              <el-icon><check /></el-icon>
             </div>
             <div class="overview-info">
               <div class="overview-value">{{ formatMoney(overview.paidAmount) }}</div>
@@ -87,7 +87,7 @@
         <el-card class="overview-card">
           <div class="overview-content">
             <div class="overview-icon pending">
-              <el-icon><ep-clock /></el-icon>
+              <el-icon><clock /></el-icon>
             </div>
             <div class="overview-info">
               <div class="overview-value">{{ formatMoney(overview.pendingAmount) }}</div>
@@ -101,7 +101,7 @@
         <el-card class="overview-card">
           <div class="overview-content">
             <div class="overview-icon overdue">
-              <el-icon><ep-warning /></el-icon>
+              <el-icon><warning /></el-icon>
             </div>
             <div class="overview-info">
               <div class="overview-value">{{ formatMoney(overview.overdueAmount) }}</div>
@@ -150,7 +150,7 @@
         <div class="card-header">
           <span>详细统计数据</span>
           <el-button type="primary" size="small" @click="handleRefresh">
-            <el-icon><ep-refresh /></el-icon>
+           <el-icon><Refresh /></el-icon>
             刷新
           </el-button>
         </div>

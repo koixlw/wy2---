@@ -15,7 +15,8 @@
         class="sidebar-menu"
       >
         <el-menu-item index="/dashboard">
-          <el-icon><ep-home-filled /></el-icon>
+        
+          <el-icon><HomeFilled /></el-icon>
           <template #title>首页</template>
         </el-menu-item>
         
@@ -26,37 +27,37 @@
             <span>住址管理</span>
           </template>
           <el-menu-item index="/addresses/list">
-            <el-icon><ep-list /></el-icon>
+            <el-icon><list /></el-icon>
             <template #title>住址列表</template>
           </el-menu-item>
           <el-menu-item index="/addresses/tree">
-            <el-icon><ep-share /></el-icon>
+            <el-icon><share /></el-icon>
             <template #title>住址树形</template>
           </el-menu-item>
         </el-sub-menu>
         
         <el-sub-menu index="/residents">
           <template #title>
-            <el-icon><ep-user /></el-icon>
+            <el-icon><user /></el-icon>
             <span>住户管理</span>
           </template>
           <el-menu-item index="/residents/list">
-            <el-icon><ep-list /></el-icon>
+            <el-icon><list /></el-icon>
             <template #title>住户列表</template>
           </el-menu-item>
         </el-sub-menu>
         
         <el-sub-menu index="/expenses">
           <template #title>
-            <el-icon><ep-money /></el-icon>
+          <el-icon><Money /></el-icon>
             <span>费用管理</span>
           </template>
           <el-menu-item index="/expenses/list">
-            <el-icon><ep-list /></el-icon>
+            <el-icon><list /></el-icon>
             <template #title>费用列表</template>
           </el-menu-item>
           <el-menu-item index="/expenses/stats">
-            <el-icon><ep-data-analysis /></el-icon>
+            <el-icon><data-analysis /></el-icon>
             <template #title>费用统计</template>
           </el-menu-item>
         </el-sub-menu>
@@ -74,8 +75,8 @@
             class="collapse-btn"
           >
             <el-icon size="20">
-              <ep-expand v-if="isCollapse" />
-              <ep-fold v-else />
+              <expand v-if="isCollapse" />
+              <fold v-else />
             </el-icon>
           </el-button>
           
@@ -89,9 +90,9 @@
         <div class="header-right">
           <el-dropdown>
             <span class="user-info">
-              <el-icon><ep-user /></el-icon>
+              <el-icon><user /></el-icon>
               <span>管理员</span>
-              <el-icon><ep-arrow-down /></el-icon>
+              <el-icon><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -176,13 +177,14 @@ const toggleCollapse = () => {
 
 .sidebar-menu .el-menu-item:hover,
 .sidebar-menu .el-sub-menu__title:hover {
-  background-color: #1e3a21;
-  color: #67c23a;
+  background-color: #3a5a3e;
+  color: #ffffff;
 }
 
 .sidebar-menu .el-menu-item.is-active {
-  background-color: #67c23a;
+  background-color: #4a7c59;
   color: white;
+  border-right: 3px solid #ffffff;
 }
 
 .main-container {

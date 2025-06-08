@@ -47,15 +47,15 @@
         
         <el-form-item>
           <el-button type="primary" @click="handleSearch">
-            <el-icon><ep-search /></el-icon>
+           <el-icon><Search /></el-icon>
             搜索
           </el-button>
           <el-button @click="handleReset">
-            <el-icon><ep-refresh /></el-icon>
+           <el-icon><Refresh /></el-icon>
             重置
           </el-button>
           <el-button type="success" @click="handleAdd">
-            <el-icon><ep-plus /></el-icon>
+          <el-icon><Money /></el-icon>
             新增住户
           </el-button>
         </el-form-item>
@@ -95,7 +95,7 @@
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">
-              <el-icon><ep-edit /></el-icon>
+            <el-icon><Edit /></el-icon>
               编辑
             </el-button>
             <el-button 
@@ -104,11 +104,11 @@
               size="small" 
               @click="handleMoveOut(row)"
             >
-              <el-icon><ep-switch-button /></el-icon>
+            <el-icon><SwitchButton /></el-icon>
               迁出
             </el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">
-              <el-icon><ep-delete /></el-icon>
+            <el-icon><Delete /></el-icon>
               删除
             </el-button>
           </template>

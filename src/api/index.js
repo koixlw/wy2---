@@ -35,14 +35,48 @@ const request = async (url, options = {}) => {
 export const addressAPI = {
   // 获取住址列表
   getList: (params = {}) => {
-    const query = new URLSearchParams(params).toString()
-    return request(`/api/addresses/${query ? '?' + query : ''}`)
+    // 处理数字参数，确保正确的类型
+    const processedParams = { ...params }
+    if (processedParams.page) {
+      processedParams.page = Number(processedParams.page)
+    }
+    if (processedParams.limit) {
+      processedParams.limit = Number(processedParams.limit)
+    }
+
+    // 手动构建查询字符串以保持数字类型
+    const queryParts = []
+    Object.keys(processedParams).forEach(key => {
+      if (processedParams[key] !== undefined && processedParams[key] !== null && processedParams[key] !== '') {
+        queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(processedParams[key])}`)
+      }
+    })
+
+    const queryString = queryParts.length > 0 ? '?' + queryParts.join('&') : ''
+    return request(`/api/addresses${queryString}`)
   },
 
   // 获取住址树形结构
   getTree: (params = {}) => {
-    const query = new URLSearchParams(params).toString()
-    return request(`/api/addresses/tree${query ? '?' + query : ''}`)
+    // 处理数字参数，确保正确的类型
+    const processedParams = { ...params }
+    if (processedParams.page) {
+      processedParams.page = Number(processedParams.page)
+    }
+    if (processedParams.limit) {
+      processedParams.limit = Number(processedParams.limit)
+    }
+
+    // 手动构建查询字符串以保持数字类型
+    const queryParts = []
+    Object.keys(processedParams).forEach(key => {
+      if (processedParams[key] !== undefined && processedParams[key] !== null && processedParams[key] !== '') {
+        queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(processedParams[key])}`)
+      }
+    })
+
+    const queryString = queryParts.length > 0 ? '?' + queryParts.join('&') : ''
+    return request(`/api/addresses/tree${queryString}`)
   },
 
   // 创建住址
@@ -78,7 +112,17 @@ export const addressAPI = {
 export const residentAPI = {
   // 获取住户列表
   getList: (params = {}) => {
-    const query = new URLSearchParams(params).toString()
+    const queryParts = []
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        if (key === 'page' || key === 'size' || key === 'limit') {
+          queryParts.push(`${key}=${Number(value)}`)
+        } else {
+          queryParts.push(`${key}=${encodeURIComponent(value)}`)
+        }
+      }
+    })
+    const query = queryParts.join('&')
     return request(`/api/residents/${query ? '?' + query : ''}`)
   },
 
@@ -128,7 +172,17 @@ export const residentAPI = {
 export const expenseAPI = {
   // 获取费用列表
   getList: (params = {}) => {
-    const query = new URLSearchParams(params).toString()
+    const queryParts = []
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        if (key === 'page' || key === 'size' || key === 'limit') {
+          queryParts.push(`${key}=${Number(value)}`)
+        } else {
+          queryParts.push(`${key}=${encodeURIComponent(value)}`)
+        }
+      }
+    })
+    const query = queryParts.join('&')
     return request(`/api/expenses/${query ? '?' + query : ''}`)
   },
 
