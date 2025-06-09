@@ -19,7 +19,7 @@ const routes = [
     path: '/addresses',
     component: Layout,
     redirect: '/addresses/list',
-    meta: { title: '住址管理', icon: 'ep:office-building' },
+    meta: { title: '住址管理', icon: 'office-building' },
     children: [
       {
         path: 'list',

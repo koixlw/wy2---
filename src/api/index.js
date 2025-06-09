@@ -237,7 +237,20 @@ export const expenseAPI = {
 
   // 获取费用统计
   getStats: (params = {}) => {
-    const query = new URLSearchParams(params).toString()
+    // 过滤空值并手动构建查询字符串
+    const queryParts = []
+    Object.keys(params).forEach(key => {
+      const value = params[key]
+      if (value !== null && value !== undefined && value !== '') {
+        // 确保数值类型参数正确传递
+        if (key === 'page' || key === 'size' || key === 'limit') {
+          queryParts.push(`${key}=${Number(value)}`)
+        } else {
+          queryParts.push(`${key}=${encodeURIComponent(value)}`)
+        }
+      }
+    })
+    const query = queryParts.join('&')
     return request(`/api/expenses/stats${query ? '?' + query : ''}`)
   }
 }

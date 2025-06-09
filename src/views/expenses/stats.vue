@@ -560,15 +560,22 @@ const loadStatsData = async () => {
       const data = response.data
       
       // 更新总体统计
-      Object.assign(overview, data.overview || {})
+      overview.totalAmount = data.totalAmount || '0.00'
+      overview.paidAmount = data.paidAmount || '0.00'
+      overview.unpaidAmount = data.unpaidAmount || '0.00'
+      overview.overdueAmount = data.overdueAmount || '0.00'
+      overview.totalCount = data.totalCount || 0
+      overview.paidCount = data.paidCount || 0
+      overview.unpaidCount = data.unpaidCount || 0
+      overview.overdueCount = data.overdueCount || 0
       
       // 更新表格数据
-      tableData.value = data.details || []
+      tableData.value = data.byType || []
       
       // 更新图表
       await nextTick()
-      updateTrendChart(data.details || [])
-      updatePieChart(data.details || [])
+      updateTrendChart(data.byPeriod || [])
+      updatePieChart(data.byType || [])
     } else {
       ElMessage.error(response.msg || '获取统计数据失败')
     }

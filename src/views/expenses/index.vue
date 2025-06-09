@@ -602,7 +602,7 @@ const loadTableData = async () => {
     const response = await expenseAPI.getList(params)
     
     if (response.code === 200) {
-      tableData.value = response.data.expenses || []
+      tableData.value = response.data.items || []
       pagination.total = response.data.pagination?.total || 0
     } else {
       ElMessage.error(response.msg || '获取数据失败')

@@ -241,9 +241,9 @@ const formRules = {
 const getNodeIcon = (type) => {
   const iconMap = {
     community: 'OfficeBuilding',
-    building: 'ep-building',
-    unit: 'ep-home-filled',
-    room: 'ep-house'
+    building: 'building',
+    unit: 'home-filled',
+    room: 'house'
   }
   return iconMap[type] || 'ep-folder'
 }

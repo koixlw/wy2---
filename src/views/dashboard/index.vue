@@ -11,13 +11,13 @@
             <div class="stat-number">{{ stats.totalAddresses }}</div>
             <div class="stat-label">总住址数</div>
           </div>
-        </div>
+        </div>    
       </el-card>
       
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-icon resident">
-            <el-icon size="32"><ep-user /></el-icon>
+            <el-icon size="32"><user /></el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-number">{{ stats.totalResidents }}</div>
@@ -29,7 +29,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-icon expense">
-            <el-icon size="32"><ep-money /></el-icon>
+            <el-icon size="32"><money /></el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-number">¥{{ formatMoney(stats.totalExpenses) }}</div>
@@ -41,7 +41,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-icon pending">
-            <el-icon size="32"><ep-warning /></el-icon>
+            <el-icon size="32"><warning /></el-icon>
           </div>
           <div class="stat-info">
             <div class="stat-number">{{ stats.pendingExpenses }}</div>
@@ -64,31 +64,31 @@
           <el-button 
             type="primary" 
             size="large" 
-            @click="$router.push('/addresses/list')"
+            @click="$router.push('/addresses')"
             class="action-btn"
           >
-          <el-icon><Money /></el-icon>
-            新增住址
+          <el-icon><office-building /></el-icon>
+            住址管理
           </el-button>
           
           <el-button 
             type="success" 
             size="large" 
-            @click="$router.push('/residents/list')"
+            @click="$router.push('/residents')"
             class="action-btn"
           >
             <el-icon><user-filled /></el-icon>
-            新增住户
+            住户管理
           </el-button>
           
           <el-button 
             type="warning" 
             size="large" 
-            @click="$router.push('/expenses/list')"
+            @click="$router.push('/expenses')"
             class="action-btn"
           >
           <el-icon><Money /></el-icon>
-            新增费用
+            费用管理
           </el-button>
           
           <el-button 
@@ -141,7 +141,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { expenseAPI } from '@/api'
+import { expenseAPI, addressAPI, residentAPI } from '@/api'
 
 // 统计数据
 const stats = ref({
@@ -152,36 +152,7 @@ const stats = ref({
 })
 
 // 最近活动
-const activities = ref([
-  {
-    id: 1,
-    type: 'address',
-    typeLabel: '住址',
-    description: '新增住址：阳光小区1号楼101室',
-    time: '2024-01-15 10:30'
-  },
-  {
-    id: 2,
-    type: 'resident',
-    typeLabel: '住户',
-    description: '新增住户：张三（业主）',
-    time: '2024-01-15 09:15'
-  },
-  {
-    id: 3,
-    type: 'expense',
-    typeLabel: '费用',
-    description: '生成2024年1月物业费',
-    time: '2024-01-15 08:00'
-  },
-  {
-    id: 4,
-    type: 'payment',
-    typeLabel: '缴费',
-    description: '李四缴纳水费 ¥120.00',
-    time: '2024-01-14 16:45'
-  }
-])
+const activities = ref([])
 
 // 格式化金额
 const formatMoney = (amount) => {
@@ -194,27 +165,114 @@ const formatMoney = (amount) => {
 // 加载统计数据
 const loadStats = async () => {
   try {
-    // 模拟数据，实际应该调用API
+    // 并行获取各种统计数据
+    const [addressResponse, residentResponse, expenseStatsResponse] = await Promise.all([
+      addressAPI.getList({ page: 1, limit: 1 }), // 只获取第一页来获取总数
+      residentAPI.getList({ page: 1, limit: 1 }), // 只获取第一页来获取总数
+      expenseAPI.getStats() // 获取费用统计
+    ])
+
+    // 更新统计数据
     stats.value = {
-      totalAddresses: 156,
-      totalResidents: 423,
-      totalExpenses: 125680000, // 以分为单位
-      pendingExpenses: 23
+      totalAddresses: addressResponse.data.total || 0,
+      totalResidents: residentResponse.data.total || 0,
+      totalExpenses: expenseStatsResponse.data.totalAmount || 0,
+      pendingExpenses: expenseStatsResponse.data.unpaidCount || expenseStatsResponse.data.pendingCount || 0
     }
   } catch (error) {
     console.error('加载统计数据失败:', error)
+    // 如果API调用失败，使用默认值
+    stats.value = {
+      totalAddresses: 0,
+      totalResidents: 0,
+      totalExpenses: 0,
+      pendingExpenses: 0
+    }
+  }
+}
+
+// 加载最近活动数据
+const loadActivities = async () => {
+  try {
+    // 获取最近的住址、住户、费用数据来构建活动列表
+    const [addressResponse, residentResponse, expenseResponse] = await Promise.all([
+      addressAPI.getList({ page: 1, limit: 5, orderBy: 'createdAt', order: 'desc' }),
+      residentAPI.getList({ page: 1, limit: 5, orderBy: 'createdAt', order: 'desc' }),
+      expenseAPI.getList({ page: 1, limit: 5, orderBy: 'createdAt', order: 'desc' })
+    ])
+
+    const newActivities = []
+    
+    // 添加住址活动
+    if (addressResponse.data.items) {
+      addressResponse.data.items.forEach(address => {
+        newActivities.push({
+          id: `address_${address.id}`,
+          type: 'address',
+          typeLabel: '住址',
+          description: `新增住址：${address.name}`,
+          time: address.createdAt
+        })
+      })
+    }
+    
+    // 添加住户活动
+    if (residentResponse.data.items) {
+      residentResponse.data.items.forEach(resident => {
+        newActivities.push({
+          id: `resident_${resident.id}`,
+          type: 'resident',
+          typeLabel: '住户',
+          description: `新增住户：${resident.name}（${resident.isOwner ? '业主' : '租户'}）`,
+          time: resident.createdAt
+        })
+      })
+    }
+    
+    // 添加费用活动
+    if (expenseResponse.data.items) {
+      expenseResponse.data.items.forEach(expense => {
+        newActivities.push({
+          id: `expense_${expense.id}`,
+          type: expense.status === 'paid' ? 'payment' : 'expense',
+          typeLabel: expense.status === 'paid' ? '缴费' : '费用',
+          description: expense.status === 'paid' 
+            ? `缴纳${expense.type}费用 ¥${formatMoney(expense.amount)}`
+            : `生成${expense.type}费用 ¥${formatMoney(expense.amount)}`,
+          time: expense.status === 'paid' ? expense.paidAt : expense.createdAt
+        })
+      })
+    }
+    
+    // 按时间排序，取最新的10条
+    activities.value = newActivities
+      .sort((a, b) => new Date(b.time) - new Date(a.time))
+      .slice(0, 10)
+      
+  } catch (error) {
+    console.error('加载活动数据失败:', error)
+    // 如果API调用失败，使用默认的示例数据
+    activities.value = [
+      {
+        id: 1,
+        type: 'address',
+        typeLabel: '住址',
+        description: '暂无最近活动数据',
+        time: new Date().toISOString()
+      }
+    ]
   }
 }
 
 // 刷新活动
 const refreshActivities = () => {
-  // 实际应该调用API获取最新活动
-  console.log('刷新活动列表')
+  loadActivities()
 }
 
 // 页面加载时获取数据
 onMounted(() => {
   loadStats()
+  loadActivities()
 })
 </script>
 
