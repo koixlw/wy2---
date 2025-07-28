@@ -51,6 +51,28 @@
       </el-card>
     </div>
     
+    <!-- 可视化看板区域 -->
+    <div class="visualization-board" style="margin-bottom: 30px;">
+      <el-card>
+        <template #header>
+          <div class="card-header">
+            <span>可视化数据看板</span>
+          </div>
+        </template>
+        <div class="visualization-charts">
+          <div class="chart-item">
+            <v-chart :option="lineOption" autoresize style="height:300px;width:100%" />
+          </div>
+          <div class="chart-item">
+            <v-chart :option="barOption" autoresize style="height:300px;width:100%" />
+          </div>
+          <div class="chart-item">
+            <v-chart :option="pieOption" autoresize style="height:300px;width:100%" />
+          </div>
+        </div>
+      </el-card>
+    </div>
+    
     <!-- 快捷操作 -->
     <div class="quick-actions">
       <el-card>
@@ -142,6 +164,23 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { expenseAPI, addressAPI, residentAPI } from '@/api'
+import * as echarts from 'echarts'
+import { use } from 'echarts/core'
+import VChart from 'vue-echarts'
+import { CanvasRenderer } from 'echarts/renderers'
+import { BarChart, LineChart, PieChart } from 'echarts/charts'
+import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
+
+use([
+  CanvasRenderer,
+  BarChart,
+  LineChart,
+  PieChart,
+  GridComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent
+])
 
 // 统计数据
 const stats = ref({
@@ -267,6 +306,28 @@ const loadActivities = async () => {
 // 刷新活动
 const refreshActivities = () => {
   loadActivities()
+}
+
+// 静态模拟数据
+const lineOption = {
+  title: { text: '近7天访问量', left: 'center', textStyle: { fontSize: 16 } },
+  tooltip: { trigger: 'axis' },
+  xAxis: { type: 'category', data: ['周一','周二','周三','周四','周五','周六','周日'] },
+  yAxis: { type: 'value' },
+  series: [{ name: '访问量', type: 'line', data: [120, 200, 150, 80, 70, 110, 130], smooth: true, areaStyle: {} }]
+}
+const barOption = {
+  title: { text: '各类费用统计', left: 'center', textStyle: { fontSize: 16 } },
+  tooltip: { trigger: 'axis' },
+  xAxis: { type: 'category', data: ['物业费','水费','电费','燃气费','停车费'] },
+  yAxis: { type: 'value' },
+  series: [{ name: '金额', type: 'bar', data: [5000, 2000, 3600, 1000, 800], itemStyle: { color: '#409eff' } }]
+}
+const pieOption = {
+  title: { text: '住户类型分布', left: 'center', textStyle: { fontSize: 16 } },
+  tooltip: { trigger: 'item' },
+  legend: { orient: 'vertical', left: 'left' },
+  series: [{ name: '住户类型', type: 'pie', radius: '60%', center: ['60%', '50%'], data: [ { value: 1048, name: '业主' }, { value: 735, name: '租户' }, { value: 580, name: '其他' } ], emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' } } }]
 }
 
 // 页面加载时获取数据
@@ -406,5 +467,20 @@ onMounted(() => {
 .activity-desc {
   flex: 1;
   color: #606266;
+}
+
+.visualization-board {
+  margin-bottom: 30px;
+}
+.visualization-charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+.chart-item {
+  flex: 1 1 300px;
+  min-width: 300px;
+  max-width: 33%;
 }
 </style>

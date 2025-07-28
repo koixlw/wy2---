@@ -1,10 +1,12 @@
 <template>
   <div class="layout-container">
     <!-- 侧边栏 -->
-    <el-aside :width="isCollapse ? '64px' : '200px'" class="sidebar">
-      <div class="logo">
-        <el-icon v-if="isCollapse" size="24"><ep-office-building /></el-icon>
-        <span v-else class="logo-text">物业管理系统</span>
+    <el-aside :width="isCollapse ? '56px' : '220px'" class="sidebar">
+      <div class="logo-area">
+        <el-icon class="logo-icon" size="28"><ep-office-building /></el-icon>
+        <transition name="fade">
+          <span v-if="!isCollapse" class="logo-title">物业管理系统</span>
+        </transition>
       </div>
       
       <el-menu
@@ -15,14 +17,12 @@
         class="sidebar-menu"
       >
         <el-menu-item index="/dashboard">
-        
           <el-icon><HomeFilled /></el-icon>
           <template #title>首页</template>
         </el-menu-item>
-        
         <el-sub-menu index="/addresses">
           <template #title>
-            <el-icon><HomeFilled /></el-icon>
+       
             <el-icon><office-building /></el-icon>
             <span>住址管理</span>
           </template>
@@ -35,7 +35,6 @@
             <template #title>住址树形</template>
           </el-menu-item>
         </el-sub-menu>
-        
         <el-sub-menu index="/residents">
           <template #title>
             <el-icon><user /></el-icon>
@@ -46,7 +45,6 @@
             <template #title>住户列表</template>
           </el-menu-item>
         </el-sub-menu>
-        
         <el-sub-menu index="/expenses">
           <template #title>
           <el-icon><Money /></el-icon>
@@ -145,46 +143,106 @@ const toggleCollapse = () => {
 }
 
 .sidebar {
-  background-color: #2c5530;
-  transition: width 0.3s;
+  background: transparent;
+  transition: width 0.2s cubic-bezier(.4,0,.2,1);
   overflow: hidden;
+  box-shadow: none;
+  border-radius: 0;
+  min-height: 100vh;
 }
 
-.logo {
+.logo-area {
   height: 60px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #1e3a21;
-  color: white;
-  font-size: 18px;
+  justify-content: flex-start;
+  background: transparent;
+  color: #233d2b;
+  font-size: 20px;
   font-weight: bold;
+  padding-left: 18px;
+  border-bottom: 1px solid #e0e6ed;
 }
-
-.logo-text {
-  margin-left: 8px;
+.logo-icon {
+  margin-right: 10px;
+  transition: margin 0.2s;
+}
+.logo-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
 .sidebar-menu {
   border: none;
-  background-color: #2c5530;
+  background: transparent;
+  margin-top: 8px;
 }
 
 .sidebar-menu .el-menu-item,
 .sidebar-menu .el-sub-menu__title {
-  color: #e8f5e8;
+  color: #233d2b;
+  border-radius: 8px;
+  margin: 0 8px;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
-
 .sidebar-menu .el-menu-item:hover,
 .sidebar-menu .el-sub-menu__title:hover {
-  background-color: #3a5a3e;
-  color: #ffffff;
+  background: rgba(35,61,43,0.08);
+  color: #1a3a22;
+  box-shadow: 0 2px 8px 0 rgba(35,61,43,0.08);
 }
-
 .sidebar-menu .el-menu-item.is-active {
-  background-color: #4a7c59;
-  color: white;
-  border-right: 3px solid #ffffff;
+  background: #e3f0ff;
+  color: #1761a0;
+  border-right: 4px solid #1761a0;
+  font-weight: bold;
+  box-shadow: 0 2px 8px 0 rgba(23,97,160,0.08);
+}
+.sidebar-menu .el-menu-item .el-icon,
+.sidebar-menu .el-sub-menu__title .el-icon {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #1761a0;
+}
+.sidebar-menu .el-sub-menu__title {
+  font-weight: 500;
+}
+.sidebar-menu .el-menu-item {
+  padding-left: 32px !important;
+}
+.sidebar-menu .el-menu--inline {
+  background: transparent !important;
+}
+.sidebar-menu .el-menu-item.is-active .el-icon {
+  color: #1761a0;
+}
+.sidebar-menu .el-menu-item .el-icon {
+  color: #1761a0;
+}
+.sidebar-menu .el-menu-item.is-active .el-icon {
+  color: #1761a0;
+}
+.sidebar-menu .el-menu-item {
+  border-radius: 8px;
+}
+.sidebar-menu .el-menu-item:not(.is-active):hover .el-icon {
+  color: #1a3a22;
+}
+.sidebar-menu .el-menu--inline .el-menu-item {
+  padding-left: 48px !important;
+}
+.sidebar-menu .el-menu--inline .el-menu-item .el-icon {
+  font-size: 16px;
 }
 
 .main-container {
@@ -194,13 +252,13 @@ const toggleCollapse = () => {
 }
 
 .header {
-  background-color: white;
-  border-bottom: 1px solid #e4e7ed;
+  background: linear-gradient(90deg, #f7fafc 60%, #e3f0ff 100%);
+  border-bottom: 1px solid #e0e6ed;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  padding: 0 28px;
+  box-shadow: 0 2px 8px 0 rgba(0, 21, 41, 0.06);
 }
 
 .header-left {
@@ -240,8 +298,9 @@ const toggleCollapse = () => {
 }
 
 .main-content {
-  background-color: #f0f2f5;
-  padding: 20px;
+  background: linear-gradient(180deg, #fafdff 80%, #eaf3fb 100%);
+  padding: 28px 28px 0 28px;
+  min-height: 0;
   overflow-y: auto;
 }
 </style>
